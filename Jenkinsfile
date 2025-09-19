@@ -3,7 +3,7 @@
 pipeline {
     agent {
         node {
-            label 'agent-online'   // your agent label
+            label 'node2'   // your agent label
             customWorkspace "/home/ubuntu/jenkins-workspace/spring-petclinic"
         }
     }
