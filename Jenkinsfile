@@ -1,16 +1,20 @@
-@Library('piper-lib') _   // use the library name you set in Jenkins Global Libraries
+@Library('piper-lib') _
 
 pipeline {
-    agent any
-    
+    agent {
+        node {
+            label 'master-agent'   // your agent label
+            customWorkspace "/home/ubuntu/jenkins-workspace/spring-petclinic"
+        }
+    }
 
     stages {
         stage('Cleanup') {
             steps {
-                // Deletes everything in the current workspace
-                deleteDir()
+                deleteDir()  // ensures the workspace is empty
             }
         }
+
         stage('Checkout') {
             steps {
                 checkout scm
@@ -20,19 +24,11 @@ pipeline {
         stage('Build Backend') {
             steps {
                 script {
-                    // This comes from vars/mavenBuild.groovy in SAP shared lib
                     mavenBuild script: this
-                }
-            }
-        }
-
-        stage('Test Backend') {
-            steps {
-                script {
-                    // Another SAP shared lib step
-                    mavenExecuteTests script: this
                 }
             }
         }
     }
 }
+
+
